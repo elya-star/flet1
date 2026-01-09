@@ -10,8 +10,10 @@ def main(page: ft.Page):
         name = name_input.value.strip()
         print(name)
         if name:
+            now = dt.datetime.now()
+            time_str = now.strftime("%Y:%m:%d - %H:%M:%S")
             text_hello.color = None
-            text_hello.value = f"Hello {name}"
+            text_hello.value = f"{time_str} - Hello, {name}"
             name_input.value = ''
         else:
             text_hello.value = "Введите корректное имя" 
