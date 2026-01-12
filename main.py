@@ -3,10 +3,14 @@ import datetime as dt
 
 def main(page: ft.Page):
     text_hello = ft.Text(value="Hello World!", color=ft.Colors.GREEN_200)
+    greeting_history = []
+    greeting_text = ft.Text('История приветствия')
 
     def on_button_click(_):
         page.title = "Моё первое приложение"
         page.theme_mode = ft.ThemeMode.LIGHT
+
+
         name = name_input.value.strip()
         print(name)
         if name:
@@ -15,16 +19,40 @@ def main(page: ft.Page):
             text_hello.color = None
             text_hello.value = f"{time_str} - Hello, {name}"
             name_input.value = ''
+
+            greeting_history.append(name)
+            print(greeting_history)
+            greeting_text.value = "История приветсвий: \n" + "\n".join(greeting_history)
+
+
         else:
             text_hello.value = "Введите корректное имя" 
             text_hello.color = ft.Colors.RED_200
         page.update()
 
-
+    
     eleveted_button = ft.ElevatedButton("SEND", icon=ft.Icons.SEND, on_click=on_button_click)
+    def clear_history(_):
+        greeting_history.clear()
+        greeting_text.value = 'История приветсвия'
+
+    clear_button = ft.IconButton(icon=ft.Icons.DELETE, on_click=clear_history)
+    def delete_last_h(_):
+        if greeting_history:
+            greeting_history.pop()
+            if greeting_history:
+                greeting_text.value = "История приветсвий:  \n" + "\n".join(greeting_history)
+            else: 
+                greeting_text.value = "История пустая"
+        else: 
+            greeting_text.value = "История пустая"
+    delete_last_b = ft.IconButton(icon=ft.Icons.REMOVE_CIRCLE_OUTLINE, on_click=delete_last_h)
     name_input = ft.TextField(label='Введите имя', on_submit=on_button_click)
 
-    page.add(text_hello, name_input, eleveted_button,)
+    main_object = ft.Row([name_input, eleveted_button, clear_button])
+    text_row = ft.Row([text_hello], alignment=ft.MainAxisAlignment.CENTER)
+
+    page.add(text_row, main_object, greeting_text, delete_last_b)
 
 ft.run(main, view=ft.AppView.WEB_BROWSER, port=8550)
     

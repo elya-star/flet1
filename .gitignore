@@ -1,3 +1,4 @@
 .venv/
 .env
-__pycache__/ssh-keygen -t ed25519 -C "твоя_почта@example.com"
+__pycache__/
+.vscode/
